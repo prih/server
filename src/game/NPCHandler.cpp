@@ -98,13 +98,6 @@ void WorldSession::SendShowBank(ObjectGuid guid)
     SendPacket(&data);
 }
 
-void WorldSession::SendShowMailBox(ObjectGuid guid)
-{
-    WorldPacket data(SMSG_SHOW_MAILBOX, 8);
-    data << ObjectGuid(guid);
-    SendPacket(&data);
-}
-
 void WorldSession::HandleTrainerListOpcode(WorldPacket& recv_data)
 {
     ObjectGuid guid;

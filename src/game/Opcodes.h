@@ -718,7 +718,7 @@ enum Opcodes
     CMSG_TEST_DROP_RATE                                   = 0x1295,
     SMSG_TEST_DROP_RATE_RESULT                            = 0x1296,
     CMSG_LFG_GET_STATUS                                   = 0x2581, // 4.3.4 15595
-    SMSG_SHOW_MAILBOX                                     = 0x1298,
+    SMSG_SHOW_MAILBOX                                     = 0x2524, // 4.3.4 15595
     SMSG_RESET_RANGED_COMBAT_TIMER                        = 0x1299,
     SMSG_CHAT_NOT_IN_PARTY                                = 0x6A14, // 4.3.4 15595
     CMSG_GMTICKETSYSTEM_TOGGLE                            = 0x129B,
