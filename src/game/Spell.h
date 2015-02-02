@@ -388,6 +388,7 @@ class Spell
         void cast(bool skipCheck = false);
         void finish(bool ok = true);
         void TakePower();
+        void TakeRunePower(bool hit);
         void TakeAmmo();
         void TakeReagents();
         void TakeCastItem();
@@ -405,7 +406,7 @@ class Spell
         SpellCastResult CheckItems();
         SpellCastResult CheckRange(bool strict);
         SpellCastResult CheckPower();
-        SpellCastResult CheckOrTakeRunePower(bool take);
+        SpellCastResult CheckRunePower();
         SpellCastResult CheckCasterAuras() const;
 
         int32 CalculateDamage(SpellEffectIndex i, Unit* target) { return m_caster->CalculateSpellDamage(target, m_spellInfo, i, &m_currentBasePoints[i]); }
