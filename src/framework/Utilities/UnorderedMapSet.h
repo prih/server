@@ -1,5 +1,8 @@
 /**
- * This code is part of MaNGOS. Contributor & Copyright details are in AUTHORS/THANKS.
+ * MaNGOS is a full featured server for World of Warcraft, supporting
+ * the following clients: 1.12.x, 2.4.3, 3.3.5a, 4.3.4a and 5.4.8
+ *
+ * Copyright (C) 2005-2015  MaNGOS project <http://getmangos.eu>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * World of Warcraft, and all World of Warcraft or Warcraft art, images,
+ * and lore are copyrighted by Blizzard Entertainment, Inc.
  */
 
 #ifndef MANGOS_UNORDERED_MAP_H
@@ -64,7 +70,6 @@ using std::hash_set;
 #  define UNORDERED_SET stdext::hash_set
 #  define HASH_NAMESPACE_START namespace stdext {
 #  define HASH_NAMESPACE_END }
-
 using stdext::hash_map;
 using stdext::hash_set;
 
@@ -91,14 +96,14 @@ HASH_NAMESPACE_END
 #  define HASH_NAMESPACE_END }
 using std::hash_map;
 using std::hash_set;
-#elif COMPILER == COMPILER_CLANG && __clang_major__ <= 3 && __clang_minor < 7
-#  define UNORDERED_MAP std::tr1::unordered_map
-#  define UNORDERED_SET std::tr1::unordered_set
-#  define HASH_NAMESPACE_START namespace std { namespace tr1 {
-#  define HASH_NAMESPACE_END } }
-#elif COMPILER == COMPILER_CLANG && (__clang_major__ > 3 || __clang_major__ == 3 && __clang_minor >= 7)
+#elif COMPILER == COMPILER_CLANG && defined(__FreeBSD__)
 #  define UNORDERED_MAP std::unordered_map
 #  define UNORDERED_SET std::unordered_set
+#  define HASH_NAMESPACE_START namespace std { namespace __1 {
+#  define HASH_NAMESPACE_END } }
+#elif COMPILER == COMPILER_CLANG
+#  define UNORDERED_MAP std::tr1::unordered_map
+#  define UNORDERED_SET std::tr1::unordered_set
 #  define HASH_NAMESPACE_START namespace std { namespace tr1 {
 #  define HASH_NAMESPACE_END } }
 #elif COMPILER == COMPILER_GNU && (__GNUC__ > 4 || __GNUC__ == 4 && __GNUC_MINOR__ >= 3)
