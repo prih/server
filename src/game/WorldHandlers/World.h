@@ -220,6 +220,8 @@ enum eConfigUInt32Values
     CONFIG_UINT32_MIN_LEVEL_FOR_RAID,
     CONFIG_UINT32_CREATURE_RESPAWN_AGGRO_DELAY,
     CONFIG_UINT32_RANDOM_BG_RESET_HOUR,
+    CONFIG_UINT32_MAX_WHOLIST_RETURNS,
+    CONFIG_UINT32_VALUE_COUNT,
     // Warden
     CONFIG_UINT32_WARDEN_CLIENT_RESPONSE_DELAY,
     CONFIG_UINT32_WARDEN_CLIENT_CHECK_HOLDOFF,
@@ -227,8 +229,7 @@ enum eConfigUInt32Values
     CONFIG_UINT32_WARDEN_CLIENT_BAN_DURATION,
     CONFIG_UINT32_WARDEN_NUM_MEM_CHECKS,
     CONFIG_UINT32_WARDEN_NUM_OTHER_CHECKS,
-    CONFIG_UINT32_WARDEN_DB_LOGLEVEL,
-    CONFIG_UINT32_VALUE_COUNT
+    CONFIG_UINT32_WARDEN_DB_LOGLEVEL
 };
 
 /// Configuration elements
@@ -487,6 +488,9 @@ struct CliCommandHolder
 };
 
 /// The World
+
+typedef UNORDERED_MAP<uint32, WorldSession*> SessionMap;
+
 class World
 {
     public:
@@ -509,10 +513,6 @@ class World
         uint32 GetMaxQueuedSessionCount() const { return m_maxQueuedSessionCount; }
         uint32 GetMaxActiveSessionCount() const { return m_maxActiveSessionCount; }
         Player* FindPlayerInZone(uint32 zone);
-
-        Weather* FindWeather(uint32 id) const;
-        Weather* AddWeather(uint32 zone_id);
-        void RemoveWeather(uint32 zone_id);
 
         /// Get the active session server limit (or security level limitations)
         uint32 GetPlayerAmountLimit() const { return m_playerLimit >= 0 ? m_playerLimit : 0; }
@@ -713,9 +713,6 @@ class World
         uint32 mail_timer;
         uint32 mail_timer_expires;
 
-        typedef UNORDERED_MAP<uint32, Weather*> WeatherMap;
-        WeatherMap m_weathers;
-        typedef UNORDERED_MAP<uint32, WorldSession*> SessionMap;
         SessionMap m_sessions;
         uint32 m_maxActiveSessionCount;
         uint32 m_maxQueuedSessionCount;

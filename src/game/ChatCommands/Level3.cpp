@@ -2302,7 +2302,7 @@ bool ChatHandler::HandleLearnAllCommand(char* /*args*/)
     int loop = 0;
     while (strcmp(allSpellList[loop], "0"))
     {
-        uint32 spell = atol((char*)allSpellList[loop++]);
+        uint32 spell = std::stoul((char*)allSpellList[loop++]);
 
         if (m_session->GetPlayer()->HasSpell(spell))
             continue;
@@ -2345,7 +2345,7 @@ bool ChatHandler::HandleLearnAllGMCommand(char* /*args*/)
     uint16 gmSpellIter = 0;
     while (strcmp(gmSpellList[gmSpellIter], "0"))
     {
-        uint32 spell = atol((char*)gmSpellList[gmSpellIter++]);
+        uint32 spell = std::stoul((char*)gmSpellList[gmSpellIter++]);
 
         SpellEntry const* spellInfo = sSpellStore.LookupEntry(spell);
         if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, m_session->GetPlayer()))
@@ -4865,17 +4865,17 @@ bool ChatHandler::HandleChangeWeatherCommand(char* args)
 
     // see enum WeatherType
     if (!Weather::IsValidWeatherType(type))
-    {
         return false;
-    }
 
     float grade;
     if (!ExtractFloat(&args, grade))
         return false;
 
-    // 0 to 1, sending -1 is instant good weather
-    if (grade < 0.0f || grade > 1.0f)
-        return false;
+    // clamp grade from 0 to 1
+    if (grade < 0.0f)
+        grade = 0.0f;
+    else if (grade > 1.0f)
+        grade = 1.0f;
 
     Player* player = m_session->GetPlayer();
     uint32 zoneId = player->GetZoneId();
@@ -4884,7 +4884,6 @@ bool ChatHandler::HandleChangeWeatherCommand(char* args)
         SendSysMessage(LANG_NO_WEATHER);
         SetSentErrorMessage(true);
     }
-
     player->GetMap()->SetWeather(zoneId, (WeatherType)type, grade, false);
 
     return true;
