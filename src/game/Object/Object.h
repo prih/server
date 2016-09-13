@@ -65,6 +65,12 @@ enum TempSummonType
     TEMPSUMMON_TIMED_OOC_OR_CORPSE_DESPAWN = 9,             // despawns after a specified time (OOC) OR when the creature dies
 };
 
+enum TempSummonLinkedAura
+{
+    TEMPSUMMON_LINKED_AURA_OWNER_CHECK  = 0x00000001,
+    TEMPSUMMON_LINKED_AURA_REMOVE_OWNER = 0x00000002
+};
+
 enum PhaseMasks
 {
     PHASEMASK_NORMAL   = 0x00000001,
@@ -400,6 +406,7 @@ class Object
 
         virtual bool HasQuest(uint32 /* quest_id */) const { return false; }
         virtual bool HasInvolvedQuest(uint32 /* quest_id */) const { return false; }
+        void SetItsNewObject(bool enable) { m_itsNewObject = enable; }
 
     protected:
         Object();
@@ -435,6 +442,7 @@ class Object
 
     private:
         bool m_inWorld;
+        bool m_itsNewObject;
 
         PackedGuid m_PackGUID;
 
@@ -567,7 +575,7 @@ class WorldObject : public Object
         float GetDistanceZ(const WorldObject* obj) const;
         bool IsInMap(const WorldObject* obj) const
         {
-            return IsInWorld() && obj->IsInWorld() && (GetMap() == obj->GetMap()) && InSamePhase(obj);
+            return obj && IsInWorld() && obj->IsInWorld() && (GetMap() == obj->GetMap()) && InSamePhase(obj);
         }
         bool IsWithinDist3d(float x, float y, float z, float dist2compare) const;
         bool IsWithinDist2d(float x, float y, float dist2compare) const;

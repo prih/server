@@ -129,7 +129,7 @@ typedef std::vector<uint32> AutoSpellList;
 #define ACTIVE_SPELLS_MAX           4
 
 #define PET_FOLLOW_DIST  1.0f
-#define PET_FOLLOW_ANGLE (M_PI_F/2.0f)
+#define PET_FOLLOW_ANGLE (M_PI_F / 4.00f) * 3.50f
 
 class Player;
 
@@ -253,6 +253,21 @@ class  Pet : public Creature
 
         PetSpellMap     m_spells;
         AutoSpellList   m_autospells;
+
+        uint32 m_opener;
+        uint32 m_openerMinRange;
+        uint32 m_openerMaxRange;
+
+        uint32 GetSpellOpener()         { return m_opener; }
+        uint32 GetSpellOpenerMinRange() { return m_openerMinRange; }
+        uint32 GetSpellOpenerMaxRange() { return m_openerMaxRange; }
+
+        void SetSpellOpener(uint32 spellId = 0, uint32 minRange = 0, uint32 maxRange = 0)
+        {
+            m_opener = spellId;
+            m_openerMinRange = minRange;
+            m_openerMaxRange = maxRange;
+        }
 
         void InitPetCreateSpells();
 

@@ -79,9 +79,9 @@ enum SpellAuraInterruptFlags
     AURA_INTERRUPT_FLAG_NOT_ABOVEWATER              = 0x00000080,   // 7    removed by entering water
     AURA_INTERRUPT_FLAG_NOT_UNDERWATER              = 0x00000100,   // 8    removed by leaving water
     AURA_INTERRUPT_FLAG_NOT_SHEATHED                = 0x00000200,   // 9    removed by unsheathing
-    AURA_INTERRUPT_FLAG_UNK10                       = 0x00000400,   // 10
-    AURA_INTERRUPT_FLAG_UNK11                       = 0x00000800,   // 11
-    AURA_INTERRUPT_FLAG_UNK12                       = 0x00001000,   // 12   removed by attack?
+    AURA_INTERRUPT_FLAG_TALK                        = 0x00000400,   // 10   talk to npc / loot? action on creature
+    AURA_INTERRUPT_FLAG_USE                         = 0x00000800,   // 11   mine/use/open action on gameobject
+    AURA_INTERRUPT_FLAG_MELEE_ATTACK                = 0x00001000,   // 12   removed by attack
     AURA_INTERRUPT_FLAG_UNK13                       = 0x00002000,   // 13
     AURA_INTERRUPT_FLAG_UNK14                       = 0x00004000,   // 14
     AURA_INTERRUPT_FLAG_UNK15                       = 0x00008000,   // 15   removed by casting a spell?
@@ -2826,7 +2826,7 @@ class  Unit : public WorldObject
          * - \ref AuraType::SPELL_AURA_MOD_POSSESS
          * - \ref AuraType::SPELL_AURA_MOD_POSSESS_PET
          */
-        void Uncharm();
+        virtual void Uncharm();
         /** 
          * Does the same as \ref Unit::GetCharmerOrOwnerGuid but returns the \ref Unit for that instead
          * @return the \ref Unit that's charming this one or owning it, NULL if there is none
@@ -3140,6 +3140,9 @@ class  Unit : public WorldObject
          * \todo Are linked and flying auras really not removed on evade?
          */
         void RemoveAllAurasOnEvade();
+
+        // remove specific aura on cast
+        void RemoveAurasOnCast(SpellEntry const* castedSpellEntry);
         
         // removing specific aura FROM stack by diff reasons and selections
         void RemoveAuraHolderFromStack(uint32 spellId, uint32 stackAmount = 1, ObjectGuid casterGuid = ObjectGuid(), AuraRemoveMode mode = AURA_REMOVE_BY_DEFAULT);
@@ -3526,6 +3529,15 @@ class  Unit : public WorldObject
         void BuildMoveFeatherFallPacket(WorldPacket* data, bool apply, uint32 value);
         void BuildMoveHoverPacket(WorldPacket* data, bool apply, uint32 value);
         void BuildMoveLevitatePacket(WorldPacket* data, bool apply, uint32 value);
+
+        // Take possession of an unit (pet, creature, ...)
+        bool TakePossessOf(Unit* possessed);
+
+        // Take possession of a new spawned unit
+        Unit* TakePossessOf(SpellEntry const* spellEntry, SummonPropertiesEntry const* summonProp, SpellEffectEntry const* spellEffect, float x, float y, float z, float ang);
+
+        // Reset control to player
+        void ResetControlState(bool attackCharmer = true);
 
     protected:
         explicit Unit();
